@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './App.module.scss';
 
 export default function App() {
   const [firstName, setFirstName] = useState('');
@@ -24,25 +25,23 @@ export default function App() {
 
       <main>
         <form onSubmit={(event) => event.preventDefault()}>
-          <div>
-            <p>Please add the first and last name to sign up:</p>
-            <input
-              onChange={(event) => setFirstName(event.target.value)}
-              value={firstName}
-              placeholder="first name"
-            />
-            <br /> <br />
-            <input
-              onChange={(event) => setLastName(event.target.value)}
-              value={lastName}
-              placeholder="last name"
-            />
-            <br />
-            <br />
-            <button onClick={handleButtonSubmit}>add as a guest</button>
-            <br />
-            <br />
-          </div>
+          <p>Please add the first and last name to sign up:</p>
+          <input
+            onChange={(event) => setFirstName(event.target.value)}
+            value={firstName}
+            placeholder="first name"
+          />
+
+          <input
+            onChange={(event) => setLastName(event.target.value)}
+            value={lastName}
+            placeholder="last name"
+          />
+
+          <button className={styles.button} onClick={handleButtonSubmit}>
+            ADD GUEST
+          </button>
+          <br />
         </form>
         <hr />
         <div>

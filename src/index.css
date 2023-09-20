@@ -8,8 +8,7 @@ body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   line-height: 25px;
-  display: flex;
-  justify-content: center;
+
   background-color: black;
   color: azure;
 }
