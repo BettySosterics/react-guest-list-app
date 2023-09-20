@@ -4,9 +4,18 @@ export default function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  // function handleFirstNameSubmit(event) {
+  //   setFirstName(event.currentTarget.value);
+  // }
+
+  // function handleLastNameSubmit(event) {
+  //   setLastName(event.currentTarget.value);
+  // }
+
+  function handleButtonSubmit() {
+    return `${firstName} ${lastName}`;
   }
+
   return (
     <>
       <header>
@@ -14,39 +23,33 @@ export default function App() {
       </header>
 
       <main>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(event) => event.preventDefault()}>
           <div>
             <p>Please add the first and last name to sign up:</p>
             <input
-              onChange={() => {
-                setFirstName();
-              }}
+              onChange={(event) => setFirstName(event.target.value)}
               value={firstName}
               placeholder="first name"
             />
             <br /> <br />
             <input
-              onChange={() => {
-                setLastName();
-              }}
+              onChange={(event) => setLastName(event.target.value)}
               value={lastName}
               placeholder="last name"
             />
             <br />
             <br />
-            <button onClick={() => setFirstName(firstName)}>
-              add as a guest
-            </button>
+            <button onClick={handleButtonSubmit}>add as a guest</button>
             <br />
             <br />
           </div>
         </form>
         <hr />
         <div>
-          <h2>Added guests</h2>
-          <p>
-            {firstName} {lastName}
-          </p>
+          <section>
+            <h2>Added guests</h2>
+            <p>{handleButtonSubmit()}</p>
+          </section>
         </div>
       </main>
     </>
