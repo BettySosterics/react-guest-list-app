@@ -3,108 +3,94 @@ import styles from './App.module.scss';
 import DataFetching from './DataFetching';
 
 export default function App() {
+  const baseUrl = 'http://localhost:4000';
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-
-  const [guests, setGuests] = useState([]);
-  const [guestId, setGuestId] = useState(0);
+  const [guestList, setGuestList] = useState([]);
+  const [newGuest, setNewGuest] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  async function getGuests() {
-    const baseUrl = 'http://localhost:4000';
-    const response = await fetch(`${baseUrl}/guests`);
-
-    const allGuests = await response.json();
-
-    setGuestId(0);
-    setGuests([...guests, allGuests.body]);
-  }
+  useEffect(() => {
+    async function getGuestList() {
+      const response = await fetch(`${baseUrl}/guests`);
+      const allGuests = await response.json();
+      setGuestList(allGuests);
+      setIsLoading(false);
+    }
+    getGuestList().catch((error) => {
+      console.error(error);
+    });
+  }, [newGuest]);
 
   useEffect(() => {
     async function firstRenderFetch() {
-      const baseUrl = 'http://localhost:4000';
       const response = await fetch(`${baseUrl}/guests`);
-
       const data = await response.json();
-
-      setGuests([data.body]);
-
+      setGuestList([data]);
       setIsLoading(false);
     }
-
     firstRenderFetch().catch((error) => {
       console.log(error);
     });
   }, []); // triggers only on first render
 
-  useEffect(() => {
-    async function createGuest() {
-      const baseUrl = 'http://localhost:4000';
-      const response = await fetch(`${baseUrl}/guests`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName: { firstName },
-          lastName: { lastName },
-        }),
-      });
-      const createdGuest = await response.json();
-      console.log(createdGuest.body.firstName);
+  // Add a new guest
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
 
-      setGuests([...guests, createdGuest.body]);
-    }
-
-    createGuest().catch((error) => {
-      console.log(error);
+  async function createGuest() {
+    const response = await fetch(`${baseUrl}/guests`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+      }),
     });
-  }, [guestId]);
+    const createdGuest = await response.json();
+    setFirstName('');
+    setLastName('');
+    setNewGuest([...guestList, createdGuest]);
+  }
 
   if (isLoading) {
     return 'Loading...';
   }
-
   return (
     <>
       <header>
         <h1>React Guest List</h1>
       </header>
-
       <main>
-        <form onSubmit={(event) => event.preventDefault()}>
+        <form onSubmit={handleSubmit}>
           <p>Please add the first and last name to sign up:</p>
           <input
-            onChange={(event) => setFirstName(event.target.value)}
+            onChange={(event) => setFirstName(event.currentTarget.value)}
             value={firstName}
             placeholder="first name"
           />
-
           <input
-            onChange={(event) => setLastName(event.target.value)}
+            onChange={(event) => setLastName(event.currentTarget.value)}
             value={lastName}
             placeholder="last name"
           />
-
           <button
             className={styles.button}
-            onClick={async () => await getGuests()}
+            onClick={async () => await createUser()}
           >
             ADD GUEST
           </button>
           <br />
         </form>
         <hr />
-
         <section className={styles.guestList}>
           <h2>Added guests</h2>
-          <DataFetching />
-
           {/* <p>{handleButtonSubmit()}</p> */}
-
           {/* <DataFetching /> */}
-
-          {guests.map((guest) => {
+          {guestList.map((guest) => {
             return (
               <div key={`guest-${guest.id}`}>
                 {guest.firstName} {guest.lastName}
