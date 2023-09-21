@@ -1,6 +1,5 @@
 header,
-form,
-section {
+form {
   display: flex;
   justify-content: center;
 }
@@ -9,6 +8,15 @@ form {
   display: grid;
   gap: 10px;
 }
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+.guestList {
+  padding: 40px;
+}
+
 .button {
   color: aliceblue;
   background-color: lightslategray;
