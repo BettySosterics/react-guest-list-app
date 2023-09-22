@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './App.module.scss';
+import AppTest from './AppTest';
 import DataFetching from './DataFetching';
 
 export default function App() {
@@ -90,6 +91,7 @@ export default function App() {
           <h2>Added guests</h2>
           {/* <p>{handleButtonSubmit()}</p> */}
           {/* <DataFetching /> */}
+
           {guestList.map((guest) => {
             return (
               <div key={`guest-${guest.id}`}>

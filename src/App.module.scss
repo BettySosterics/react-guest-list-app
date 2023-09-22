@@ -1,20 +1,17 @@
 header,
-form {
+main {
   display: flex;
   justify-content: center;
 }
 
-form {
+form,
+main {
   display: grid;
   gap: 10px;
 }
 
-h2 {
-  display: flex;
-  justify-content: center;
-}
-.guestList {
-  padding: 40px;
+.guestlist {
+  display: grid;
 }
 
 .button {
