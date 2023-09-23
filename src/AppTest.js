@@ -39,7 +39,7 @@ export default function AppTest() {
     const newGuest = {
       firstName,
       lastName,
-      attending: false,
+      isAttending,
       // uuid: newUserId,
     };
     setGuests([...guests, newGuest]);
@@ -107,11 +107,12 @@ export default function AppTest() {
               </div>
             ))}
           </div> */}
-          {guests.map((guest) => {
+          {guests.map((guest, index) => {
             return (
-              <div key="guest-list-id">
+              <div key={`{index-${index.id}`}>
                 <li>
-                  {guest.firstName} {guest.lastName}
+                  {guest.firstName} {guest.lastName}{' '}
+                  {guest.isAttending ? 'attending' : 'not attending'}
                   <input
                     type="checkbox"
                     checked={isAttending}
@@ -119,93 +120,12 @@ export default function AppTest() {
                       setIsAttending(event.currentTarget.checked);
                     }}
                   />{' '}
-                  attending?
-                  {/* {guest.attending ? 'Attending' : 'Not Attending'}{' '} */}
-                  {/* {guest.attending === isAttending
-                    ? 'attending'
-                    : 'not attending'} */}
                 </li>
               </div>
             );
           })}
-
-          {/* {isAttending ? 'attending' : 'not attending'} */}
         </div>
       </main>
     </>
   );
 }
-
-// const people = [
-//   {
-//     name: {
-//       first: '',
-//       last: '',
-//     },
-//     uuid: '0',
-//   },
-//   {
-//     name: {
-//       first: '',
-//       last: '',
-//     },
-//     uuid: '1',
-//   },
-// ];
-
-// export default function ExampleArrayOfObjectsInReact() {
-//   const [users, setUsers] = useState(people);
-//   return (
-//     <div>
-//       {users.map((user) => {
-//         return (
-//           <div key={`user-profile-${user.uuid}`}>
-//             <h2>
-//               {user.name.first} {user.name.last}
-//             </h2>
-
-//             <hr />
-//           </div>
-//         );
-//       })}
-//       <button
-//         onClick={() => {
-//           const newUserId = users[users.length - 1].uuid + 1;
-//           const newUser = {
-//             name: {
-//               first: 'Derek',
-//               last: 'Gonzales',
-//             },
-//             uuid: newUserId,
-//           };
-//           // // 1. Create a copy of the current state
-//           const newPeople = [...users]; // spread operator
-//           // // 2. Update the copy created in step 1
-//           newPeople.push(newUser);
-//           // // 3. Set the state to the old state
-//           setUsers(newPeople);
-//           setUsers([...users, newUser]);
-//         }}
-//       >
-//         Add new user
-//       </button>
-
-//       <button
-//         onClick={() => {
-//           const newPeople = [...users];
-//           newPeople.pop();
-//           setUsers(newPeople);
-//         }}
-//       >
-//         Delete last user
-//       </button>
-//       {/* <h2>
-//         {users.name.title} {users.name.first} {users.name.last}
-//       </h2>
-//       <div>
-//         Location: {users.location.city}, {users.location.country}
-//       </div>
-//       <div>Email: {users.email}</div> */}
-//     </div>
-//   );
-// }
