@@ -1,43 +1,60 @@
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import styles from './App.module.scss';
 
-const guestList = [
-  {
-    firstname: 'Billie Joe',
-    lastname: 'Armstrong',
-    attending: true,
-    uuid: '1',
-  },
-  {
-    firstname: 'Kelly',
-    lastname: 'Clarkson',
-    attending: true,
-    uuid: '2',
-  },
-  {
-    firstname: 'Michelle',
-    lastname: 'Pfeiffer',
-    attending: false,
-    uuid: '3',
-  },
-];
+// const guestList = [
+//   {
+//     firstname: 'Billie Joe',
+//     lastname: 'Armstrong',
+//     attending: true,
+//     uuid: '1',
+//   },
+//   {
+//     firstname: 'Kelly',
+//     lastname: 'Clarkson',
+//     attending: true,
+//     uuid: '2',
+//   },
+//   {
+//     firstname: 'Michelle',
+//     lastname: 'Pfeiffer',
+//     attending: false,
+//     uuid: '3',
+//   },
+// ];
 
 export default function AppTest() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  const [guests, setGuests] = useState(guestList);
+  const [guests, setGuests] = useState([]);
   const [isAttending, setIsAttending] = useState(false);
+
+  // const newUserId = guests[guests.length - 1].uuid + 1;
+
+  const addGuest = () => {
+    if (firstName.trim() === '' || lastName.trim() === '') {
+      return;
+    }
+    const newGuest = {
+      firstName,
+      lastName,
+      attending: false,
+      // uuid: newUserId,
+    };
+    setGuests([...guests, newGuest]);
+    setFirstName('');
+    setLastName('');
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      addGuest();
+    }
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-  }
-  function handleFirstNameChange(e) {
-    setFirstName(e.target.value);
-  }
-  function handleLastNameChange(e) {
-    setLastName(e.target.value);
   }
 
   return (
@@ -51,30 +68,15 @@ export default function AppTest() {
           <input
             placeholder="first name"
             value={firstName}
-            onChange={handleFirstNameChange}
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <input
             placeholder="last name"
             value={lastName}
-            onChange={handleLastNameChange}
+            onChange={(e) => setLastName(e.target.value)}
+            onKeyDown={handleEnter}
           />
-          <button
-            className={styles.button}
-            onClick={() => {
-              const newUserId = guests[guests.length - 1].uuid + 1;
-              const newGuest = {
-                firstname: 'Mike',
-                lastname: 'Dirnt',
-                attending: true,
-                uuid: newUserId,
-              };
-
-              const newGuests = [...guestList];
-              newGuests.push(newGuest);
-              setGuests(newGuests);
-              setGuests([...guests, newGuest]);
-            }}
-          >
+          <button className={styles.button} onClick={addGuest}>
             ADD GUEST
           </button>
 
@@ -93,37 +95,45 @@ export default function AppTest() {
 
         <div className="guestlist">
           {/* <p>Please check if the name is correct:</p> */}
-          {firstName} {lastName}
+          {/* {firstName} {lastName} */}
           <br />
           <br />
+          {/* <div>
+            {guests.map((guest, index) => (
+              <div key={`{index-${index.id}`} data-test-id="guest">
+                <p>
+                  Name: {guest.firstName} {guest.lastName}
+                </p>
+              </div>
+            ))}
+          </div> */}
           {guests.map((guest) => {
             return (
-              <div key={`guest-list-${guest.uuid}`}>
-                <h3>
-                  {guest.firstname} {guest.lastname}{' '}
-                  {guest.attending === isAttending
+              <div key="guest-list-id">
+                <li>
+                  {guest.firstName} {guest.lastName}
+                  <input
+                    type="checkbox"
+                    checked={isAttending}
+                    onChange={(event) => {
+                      setIsAttending(event.currentTarget.checked);
+                    }}
+                  />{' '}
+                  attending?
+                  {/* {guest.attending ? 'Attending' : 'Not Attending'}{' '} */}
+                  {/* {guest.attending === isAttending
                     ? 'attending'
-                    : 'not attending'}
-                </h3>
+                    : 'not attending'} */}
+                </li>
               </div>
             );
           })}
-          <input
-            type="checkbox"
-            checked={isAttending}
-            onChange={(event) => {
-              setIsAttending(event.currentTarget.checked);
-            }}
-          />
-          {isAttending ? 'attending' : 'not attending'}
+
+          {/* {isAttending ? 'attending' : 'not attending'} */}
         </div>
       </main>
     </>
   );
-}
-
-{
-  /* from jose */
 }
 
 // const people = [
