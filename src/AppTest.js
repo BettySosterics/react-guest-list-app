@@ -29,6 +29,7 @@ export default function AppTest() {
 
   const [guests, setGuests] = useState([]);
   const [isAttending, setIsAttending] = useState(false);
+  const [id, setId] = useState('');
 
   // const newUserId = guests[guests.length - 1].uuid + 1;
 
@@ -40,11 +41,17 @@ export default function AppTest() {
       firstName,
       lastName,
       isAttending,
-      // uuid: newUserId,
+      id,
     };
     setGuests([...guests, newGuest]);
     setFirstName('');
     setLastName('');
+  };
+
+  const handleGuestAttend = (index) => {
+    const updateAttending = [...guests];
+    updateAttending[index].attending = !updateAttending[index].attending;
+    setGuests(updateAttending);
   };
 
   const handleEnter = (e) => {
@@ -107,9 +114,26 @@ export default function AppTest() {
               </div>
             ))}
           </div> */}
-          {guests.map((guest, index) => {
+
+          {guests.map((guest, index) => (
+            <li key={`guest-${guest.id}`}>
+              {guest.firstName} {guest.lastName}
+              {guest.isAttending}
+              <input
+                aria-label="attending"
+                type="checkbox"
+                name="attending"
+                checked={guest.attending}
+                onChange={() => {
+                  handleGuestAttend(index);
+                }}
+              />{' '}
+            </li>
+          ))}
+
+          {/* {guests.map((guest) => {
             return (
-              <div key={`{index-${index.id}`}>
+              <div key={guest - id}>
                 <li>
                   {guest.firstName} {guest.lastName}{' '}
                   {guest.isAttending ? 'attending' : 'not attending'}
@@ -123,7 +147,7 @@ export default function AppTest() {
                 </li>
               </div>
             );
-          })}
+          })} */}
         </div>
       </main>
     </>
