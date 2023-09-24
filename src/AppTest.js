@@ -1,27 +1,6 @@
-// import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import styles from './App.module.scss';
-
-// const guestList = [
-//   {
-//     firstname: 'Billie Joe',
-//     lastname: 'Armstrong',
-//     attending: true,
-//     uuid: '1',
-//   },
-//   {
-//     firstname: 'Kelly',
-//     lastname: 'Clarkson',
-//     attending: true,
-//     uuid: '2',
-//   },
-//   {
-//     firstname: 'Michelle',
-//     lastname: 'Pfeiffer',
-//     attending: false,
-//     uuid: '3',
-//   },
-// ];
 
 export default function AppTest() {
   const [firstName, setFirstName] = useState('');
@@ -29,30 +8,30 @@ export default function AppTest() {
 
   const [guests, setGuests] = useState([]);
   const [isAttending, setIsAttending] = useState(false);
-  const [id, setId] = useState('');
-
-  // const newUserId = guests[guests.length - 1].uuid + 1;
-
+  const [id, setId] = useState();
+  // const [isCookieAccepted, setIsCookieAccepted] = useState(false);
   const addGuest = () => {
     if (firstName.trim() === '' || lastName.trim() === '') {
       return;
     }
+    // const newGuestId = guests[guests.length - 1].id + 1;
     const newGuest = {
       firstName,
       lastName,
       isAttending,
-      id,
+      id: nanoid(id),
     };
     setGuests([...guests, newGuest]);
     setFirstName('');
     setLastName('');
+    setId();
   };
 
-  const handleGuestAttend = (index) => {
-    const updateAttending = [...guests];
-    updateAttending[index].attending = !updateAttending[index].attending;
-    setGuests(updateAttending);
-  };
+  // const handleCheckBox = (index) => {
+  //   const updateAttending = [...guests];
+  //   updateAttending[index].attending = !updateAttending[index].attending;
+  //   setGuests(updateAttending);
+  // };
 
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
@@ -101,36 +80,42 @@ export default function AppTest() {
         </form>
 
         <div className="guestlist">
-          {/* <p>Please check if the name is correct:</p> */}
-          {/* {firstName} {lastName} */}
-          <br />
-          <br />
-          {/* <div>
-            {guests.map((guest, index) => (
-              <div key={`{index-${index.id}`} data-test-id="guest">
-                <p>
-                  Name: {guest.firstName} {guest.lastName}
-                </p>
-              </div>
-            ))}
-          </div> */}
-
-          {guests.map((guest, index) => (
-            <li key={`guest-${guest.id}`}>
+          {guests.map((guest) => (
+            <li key={`guest-${nanoid()}`}>
               {guest.firstName} {guest.lastName}
-              {guest.isAttending}
+              {guest.isAttending} {'  '}
+              <br />
+              {guest.id} <br />
+              {JSON.stringify(guest.isAttending)} <br />
+              {JSON.stringify(
+                isAttending ? 'is attending' : 'is not attending',
+              )}
               <input
                 aria-label="attending"
                 type="checkbox"
-                name="attending"
-                checked={guest.attending}
-                onChange={() => {
-                  handleGuestAttend(index);
+                checked={isAttending}
+                onChange={(e) => {
+                  setIsAttending(e.currentTarget.checked);
                 }}
               />{' '}
+              <hr />
             </li>
           ))}
-
+          {/* <hr />
+          <form>
+            {JSON.stringify(
+              isCookieAccepted ? 'is accepted' : 'is not accepted',
+            )}
+            <input
+              type="checkbox"
+              // 2. connect the state variables to the form fields
+              checked={isCookieAccepted}
+              // 3. Update the state value with the event.currentTarget.checked
+              onChange={(event) => {
+                setIsCookieAccepted(event.currentTarget.checked);
+              }}
+            />
+          </form> */}
           {/* {guests.map((guest) => {
             return (
               <div key={guest - id}>
