@@ -1,107 +1,146 @@
-import { useEffect, useState } from 'react';
+import { nanoid } from 'nanoid';
+import { useState } from 'react';
 import styles from './App.module.scss';
-import AppTest from './AppTest';
-import DataFetching from './DataFetching';
 
 export default function App() {
-  const baseUrl = 'http://localhost:4000';
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [guestList, setGuestList] = useState([]);
-  const [newGuest, setNewGuest] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    async function getGuestList() {
-      const response = await fetch(`${baseUrl}/guests`);
-      const allGuests = await response.json();
-      setGuestList(allGuests);
-      setIsLoading(false);
+  const [guests, setGuests] = useState([]);
+  // const [isAttending, setIsAttending] = useState(false);
+  // const [id, setId] = useState();
+  // const [isCookieAccepted, setIsCookieAccepted] = useState(false);
+
+  const addGuest = () => {
+    if (firstName.trim() === '' || lastName.trim() === '') {
+      return;
     }
-    getGuestList().catch((error) => {
-      console.error(error);
-    });
-  }, [newGuest]);
+    // const newGuestId = guests[guests.length - 1].id + 1;
+    const newGuest = {
+      firstName,
+      lastName,
+      attending: false,
+      id: nanoid(),
+    };
+    setGuests([...guests, newGuest]);
+    setFirstName('');
+    setLastName('');
+    // setId();
+  };
 
-  useEffect(() => {
-    async function firstRenderFetch() {
-      const response = await fetch(`${baseUrl}/guests`);
-      const data = await response.json();
-      setGuestList([data]);
-      setIsLoading(false);
+  const clickDeleteGuest = (index) => {
+    const updatedGuests = guests.filter((guest) => guest.id !== index);
+    setGuests(updatedGuests);
+  };
+
+  const changeAttendingStatus = (index) => {
+    const updateAttending = [...guests];
+    updateAttending[index].attending = !updateAttending[index].attending;
+    setGuests(updateAttending);
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      addGuest();
     }
-    firstRenderFetch().catch((error) => {
-      console.log(error);
-    });
-  }, []); // triggers only on first render
+  };
 
-  // Add a new guest
   function handleSubmit(e) {
     e.preventDefault();
   }
 
-  async function createGuest() {
-    const response = await fetch(`${baseUrl}/guests`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-      }),
-    });
-    const createdGuest = await response.json();
-    setFirstName('');
-    setLastName('');
-    setNewGuest([...guestList, createdGuest]);
-  }
-
-  if (isLoading) {
-    return 'Loading...';
-  }
   return (
     <>
       <header>
-        <h1>React Guest List</h1>
+        <h1>Guest List</h1>
       </header>
       <main>
-        <form onSubmit={handleSubmit}>
-          <p>Please add the first and last name to sign up:</p>
-          <input
-            onChange={(event) => setFirstName(event.currentTarget.value)}
-            value={firstName}
-            placeholder="first name"
-          />
-          <input
-            onChange={(event) => setLastName(event.currentTarget.value)}
-            value={lastName}
-            placeholder="last name"
-          />
-          <button
-            className={styles.button}
-            onClick={async () => await createUser()}
-          >
+        <form className="form" onSubmit={handleSubmit}>
+          {/* <p>Please add the first and last name to sign up:</p> */}
+          <label htmlFor={firstName}>
+            <input
+              placeholder="first name"
+              value={firstName}
+              id={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </label>{' '}
+          <label htmlFor={lastName}>
+            <input
+              placeholder="last name"
+              value={lastName}
+              id={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              onKeyDown={handleEnter}
+            />
+          </label>{' '}
+          <button className={styles.button} onClick={addGuest}>
             ADD GUEST
           </button>
           <br />
         </form>
-        <hr />
-        <section className={styles.guestList}>
-          <h2>Added guests</h2>
-          {/* <p>{handleButtonSubmit()}</p> */}
-          {/* <DataFetching /> */}
 
-          {guestList.map((guest) => {
+        <div className="guestlist" data-test-id="guest">
+          {guests.map((guest, index) => (
+            <li key={`guest-${nanoid()}`}>
+              {guest.firstName} {guest.lastName}{' '}
+              {JSON.parse(
+                JSON.stringify(
+                  guest.attending ? 'is attending' : 'is not attending',
+                ),
+              )}
+              <input
+                aria-label="attending"
+                type="checkbox"
+                // checked={id.isAttending}
+                checked={guest.attending}
+                onChange={() => {
+                  changeAttendingStatus(index);
+                }}
+              />{' '}
+              <button
+                className={styles.removeButton}
+                onClick={() => {
+                  clickDeleteGuest(guest.id);
+                }}
+              >
+                REMOVE
+              </button>
+            </li>
+          ))}
+          {/* <hr />
+          <form>
+            {JSON.stringify(
+              isCookieAccepted ? 'is accepted' : 'is not accepted',
+            )}
+            <input
+              type="checkbox"
+              // 2. connect the state variables to the form fields
+              checked={isCookieAccepted}
+              // 3. Update the state value with the event.currentTarget.checked
+              onChange={(event) => {
+                setIsCookieAccepted(event.currentTarget.checked);
+              }}
+            />
+          </form> */}
+          {/* {guests.map((guest) => {
             return (
-              <div key={`guest-${guest.id}`}>
-                {guest.firstName} {guest.lastName}
-                <div>Attending: {guest.attending}</div>
-                <hr />
+              <div key={guest - id}>
+                <li>
+                  {guest.firstName} {guest.lastName}{' '}
+                  {guest.isAttending ? 'attending' : 'not attending'}
+                  <input
+                    type="checkbox"
+                    checked={isAttending}
+                    onChange={(event) => {
+                      setIsAttending(event.currentTarget.checked);
+                    }}
+                  />{' '}
+                </li>
               </div>
             );
-          })}
-        </section>
+          })} */}
+        </div>
       </main>
     </>
   );
