@@ -2,16 +2,40 @@ header,
 main {
   display: flex;
   justify-content: center;
+  margin: 20px;
 }
 
 form,
 main {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
   gap: 10px;
+  align-items: center;
 }
 
 .guestlist {
-  display: grid;
+  // display: flex;
+  // justify-content: space-evenly;
+}
+
+li {
+  list-style-type: none;
+  padding: 20px 20px;
+}
+
+.removeButton {
+  color: rgb(225, 236, 158);
+  background-color: lightcoral;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(236, 100, 100);
+  }
 }
 
 .button {
@@ -32,10 +56,9 @@ input {
   background-color: aliceblue;
   text-align: center;
   font-size: 15px;
-  font-style: inherit;
-  border-radius: 6px;
+  border-radius: 4px;
   border-style: none;
-  padding: 10px 0;
+  padding: 12px 20px;
 
   &:focus {
     border-style: none;

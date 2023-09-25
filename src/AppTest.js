@@ -56,22 +56,24 @@ export default function AppTest() {
       </header>
       <main>
         <form className="form" onSubmit={handleSubmit}>
-          <p>Please add the first and last name to sign up:</p>
-          <label htmlFor={firstName}>first name</label>{' '}
-          <input
-            placeholder="first name"
-            value={firstName}
-            id={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <label htmlFor={lastName}>last name</label>{' '}
-          <input
-            placeholder="last name"
-            value={lastName}
-            id={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            onKeyDown={handleEnter}
-          />
+          {/* <p>Please add the first and last name to sign up:</p> */}
+          <label htmlFor={firstName}>
+            <input
+              placeholder="first name"
+              value={firstName}
+              id={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </label>{' '}
+          <label htmlFor={lastName}>
+            <input
+              placeholder="last name"
+              value={lastName}
+              id={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              onKeyDown={handleEnter}
+            />
+          </label>{' '}
           <button className={styles.button} onClick={addGuest}>
             ADD GUEST
           </button>
@@ -97,14 +99,13 @@ export default function AppTest() {
                 }}
               />{' '}
               <button
-                className={styles.button}
+                className={styles.removeButton}
                 onClick={() => {
                   clickDeleteGuest(guest.id);
                 }}
               >
-                DELETE GUEST
+                REMOVE
               </button>
-              <hr />
             </li>
           ))}
           {/* <hr />
