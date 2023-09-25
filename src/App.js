@@ -1,6 +1,9 @@
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
+import { sassTrue } from 'sass';
 import styles from './App.module.scss';
+
+// const baseUrl = 'http://localhost:4000';
 
 export default function App() {
   const [firstName, setFirstName] = useState('');
@@ -22,6 +25,19 @@ export default function App() {
       attending: false,
       id: nanoid(),
     };
+
+    // const response = await fetch(`${baseUrl}/guests`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ firstName,
+    //     lastName,
+    //     attending: false,
+    //     id: nanoid(), }),
+    // });
+
+    // const newGuest = await response.json();
     setGuests([...guests, newGuest]);
     setFirstName('');
     setLastName('');
@@ -31,6 +47,9 @@ export default function App() {
   const clickDeleteGuest = (index) => {
     const updatedGuests = guests.filter((guest) => guest.id !== index);
     setGuests(updatedGuests);
+
+    //     const response = await fetch(`${baseUrl}/guests/1`, { method: 'DELETE' });
+    // const deletedGuest = await response.json();
   };
 
   const changeAttendingStatus = (index) => {
@@ -63,6 +82,7 @@ export default function App() {
               value={firstName}
               id={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              required
             />
           </label>{' '}
           <label htmlFor={lastName}>
@@ -72,6 +92,7 @@ export default function App() {
               id={lastName}
               onChange={(e) => setLastName(e.target.value)}
               onKeyDown={handleEnter}
+              required
             />
           </label>{' '}
           <button className={styles.button} onClick={addGuest}>
