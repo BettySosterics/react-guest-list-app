@@ -7,9 +7,10 @@ export default function AppTest() {
   const [lastName, setLastName] = useState('');
 
   const [guests, setGuests] = useState([]);
-  const [isAttending, setIsAttending] = useState(false);
-  const [id, setId] = useState();
+  // const [isAttending, setIsAttending] = useState(false);
+  // const [id, setId] = useState();
   // const [isCookieAccepted, setIsCookieAccepted] = useState(false);
+
   const addGuest = () => {
     if (firstName.trim() === '' || lastName.trim() === '') {
       return;
@@ -18,13 +19,19 @@ export default function AppTest() {
     const newGuest = {
       firstName,
       lastName,
-      isAttending,
-      id: nanoid(id),
+      attending: false,
+      id: nanoid(),
     };
     setGuests([...guests, newGuest]);
     setFirstName('');
     setLastName('');
-    setId();
+    // setId();
+  };
+
+  const changeAttendingStatus = (index) => {
+    const updateAttending = [...guests];
+    updateAttending[index].attending = !updateAttending[index].attending;
+    setGuests(updateAttending);
   };
 
   // const handleCheckBox = (index) => {
@@ -51,21 +58,24 @@ export default function AppTest() {
       <main>
         <form className="form" onSubmit={handleSubmit}>
           <p>Please add the first and last name to sign up:</p>
+          <label htmlFor={firstName}>first name</label>{' '}
           <input
             placeholder="first name"
             value={firstName}
+            id={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
+          <label htmlFor={lastName}>last name</label>{' '}
           <input
             placeholder="last name"
             value={lastName}
+            id={lastName}
             onChange={(e) => setLastName(e.target.value)}
             onKeyDown={handleEnter}
           />
           <button className={styles.button} onClick={addGuest}>
             ADD GUEST
           </button>
-
           <button
             className={styles.button}
             onClick={() => {
@@ -79,23 +89,22 @@ export default function AppTest() {
           <br />
         </form>
 
-        <div className="guestlist">
-          {guests.map((guest) => (
+        <div className="guestlist" data-test-id="guest">
+          {guests.map((guest, index) => (
             <li key={`guest-${nanoid()}`}>
-              {guest.firstName} {guest.lastName}
-              {guest.isAttending} {'  '}
-              <br />
-              {guest.id} <br />
-              {JSON.stringify(guest.isAttending)} <br />
-              {JSON.stringify(
-                isAttending ? 'is attending' : 'is not attending',
+              {guest.firstName} {guest.lastName}{' '}
+              {JSON.parse(
+                JSON.stringify(
+                  guest.attending ? 'is attending' : 'is not attending',
+                ),
               )}
               <input
                 aria-label="attending"
                 type="checkbox"
-                checked={isAttending}
-                onChange={(e) => {
-                  setIsAttending(e.currentTarget.checked);
+                // checked={id.isAttending}
+                checked={guest.attending}
+                onChange={() => {
+                  changeAttendingStatus(index);
                 }}
               />{' '}
               <hr />
