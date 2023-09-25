@@ -10,9 +10,9 @@
 
 # production
 /build
-src/AppOld.js
-src/DataFetching.js
-src/Form.js
+/AppOld.js
+/DataFetching.js
+/Form.js
 
 # misc
 .DS_Store
