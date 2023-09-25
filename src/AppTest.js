@@ -28,17 +28,16 @@ export default function AppTest() {
     // setId();
   };
 
+  const clickDeleteGuest = (index) => {
+    const updatedGuests = guests.filter((guest) => guest.id !== index);
+    setGuests(updatedGuests);
+  };
+
   const changeAttendingStatus = (index) => {
     const updateAttending = [...guests];
     updateAttending[index].attending = !updateAttending[index].attending;
     setGuests(updateAttending);
   };
-
-  // const handleCheckBox = (index) => {
-  //   const updateAttending = [...guests];
-  //   updateAttending[index].attending = !updateAttending[index].attending;
-  //   setGuests(updateAttending);
-  // };
 
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
@@ -76,16 +75,6 @@ export default function AppTest() {
           <button className={styles.button} onClick={addGuest}>
             ADD GUEST
           </button>
-          <button
-            className={styles.button}
-            onClick={() => {
-              const newGuests = [...guests];
-              newGuests.pop();
-              setGuests(newGuests);
-            }}
-          >
-            DELETE GUEST
-          </button>
           <br />
         </form>
 
@@ -107,6 +96,14 @@ export default function AppTest() {
                   changeAttendingStatus(index);
                 }}
               />{' '}
+              <button
+                className={styles.button}
+                onClick={() => {
+                  clickDeleteGuest(guest.id);
+                }}
+              >
+                DELETE GUEST
+              </button>
               <hr />
             </li>
           ))}
